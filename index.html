@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tap the Frog 🐸</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #dff7e3;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    h1 {
+        margin: 20px 0 5px;
+        font-size: 32px;
+    }
+
+    #info {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    #game {
+        position: relative;
+        width: 90vw;
+        height: 70vh;
+        margin: auto;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    #frog {
+        position: absolute;
+        font-size: 60px;
+        cursor: pointer;
+        user-select: none;
+        display: none;
+    }
+
+    #start {
+        margin-top: 15px;
+        padding: 14px 25px;
+        font-size: 18px;
+        border: none;
+        border-radius: 12px;
+        background: #4caf50;
+        color: white;
+        cursor: pointer;
+    }
+
+    #message {
+        font-size: 22px;
+        margin-top: 10px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>🐸 Tap the Frog</h1>
+
+<div id="info">
+    Score : <span id="score">0</span>
+    &nbsp; | &nbsp;
+    Temps : <span id="time">30</span>s
+</div>
+
+<div id="game">
+    <div id="frog">🐸</div>
+</div>
+
+<button id="start">COMMENCER</button>
+
+<div id="message"></div>
+
+<script>
+
+let score = 0;
+let time = 30;
+let timer;
+
+const frog = document.getElementById("frog");
+const game = document.getElementById("game");
+const scoreDisplay = document.getElementById("score");
+const timeDisplay = document.getElementById("time");
+const startButton = document.getElementById("start");
+const message = document.getElementById("message");
+
+function moveFrog() {
+
+    const maxX = game.clientWidth - frog.offsetWidth;
+    const maxY = game.clientHeight - frog.offsetHeight;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    frog.style.left = x + "px";
+    frog.style.top = y + "px";
+}
+
+frog.addEventListener("click", function() {
+
+    if (time <= 0) return;
+
+    score++;
+    scoreDisplay.textContent = score;
+
+    moveFrog();
+});
+
+startButton.addEventListener("click", function() {
+
+    score = 0;
+    time = 30;
+
+    scoreDisplay.textContent = score;
+    timeDisplay.textContent = time;
+    message.textContent = "";
+
+    frog.style.display = "block";
+    startButton.disabled = true;
+
+    moveFrog();
+
+    timer = setInterval(function() {
+
+        time--;
+        timeDisplay.textContent = time;
+
+        if (time <= 0) {
+
+            clearInterval(timer);
+
+            frog.style.display = "none";
+            startButton.disabled = false;
+
+            message.textContent =
+                "🎉 Partie terminée ! Score : " + score;
+        }
+
+    }, 1000);
+});
+
+</script>
+
+</body>
+</html>
